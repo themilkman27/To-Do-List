@@ -18,6 +18,8 @@ struct AddItemView: View {
 
     var body: some View {
         NavigationView {
+            TextField("Description", text: $description)
+            DatePicker("Due Date", selection: $dueDate, displayedComponents: .date)
             Form {
                 Picker("Priority", selection: $priority) {
                     ForEach(Self.priorities, id: \.self) { priority in
@@ -26,6 +28,14 @@ struct AddItemView: View {
                     }
                 }
             }
+            .navigationBarTitle("Add New To-Do Item", displayMode: .inline)
+            .navigationBarItems(trailing: Button("Save") {
+                if priority.count > 0 && description.count > 0 {
+                    let item = ToDoItem(id: UUID(), priority: priority, description: description, dueDate: dueDate)
+                    toDoList.items.append(item)
+                    presentationMode.wrappedValue.dismiss()
+                }
+            })
         }
     }
 }
